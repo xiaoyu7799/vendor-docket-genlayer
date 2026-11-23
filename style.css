@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{font-family:"DM Sans",system-ui,sans-serif;color:#171f28;background:#eae7de;--ink:#171f28;--muted:#565e64;--paper:#f9f7ef;--line:#c9c6b9;--green:#cde787;--mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box}
+body{margin:0}
+a{color:inherit;text-underline-offset:.2em}
+button,input{font:inherit}
+button{cursor:pointer;border:1px solid var(--ink);background:transparent;color:inherit;padding:.65rem .9rem}
+button:disabled{opacity:.45;cursor:default}
+button:not(:disabled):hover{background:var(--green);color:var(--ink)}
+:focus-visible{outline:3px solid #6b842c;outline-offset:3px}
+.mast{background:var(--ink);color:white;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem max(4vw,1rem);border-bottom:1px solid #51565d}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-weight:700}
+.mark{display:grid;place-items:center;background:var(--green);color:var(--ink);width:2rem;height:2rem;font-family:"Instrument Serif",Georgia,serif;font-size:1.5rem}
+.mast p,.kicker{font:500 .69rem var(--mono);letter-spacing:.1em}
+.mast button{border-color:#9ba0a0}
+main{max-width:1440px;margin:auto;padding:0 max(4vw,1rem) 2rem}
+.intro{position:relative;isolation:isolate;padding:clamp(2rem,5vw,4.7rem) 0 2.5rem;border-bottom:1px solid var(--line);overflow:hidden}
+.intro::after{content:"";position:absolute;z-index:-1;inset:0 0 0 48%;background:repeating-linear-gradient(135deg,transparent 0 21px,#343b2515 21px 22px);mask-image:linear-gradient(90deg,transparent,black)}
+.intro h1{font:400 clamp(3.5rem,9vw,8rem)/.79 "Instrument Serif",Georgia,serif;margin:.4em 0 .27em;letter-spacing:-.025em}
+.intro em{color:#435328;font-weight:400}
+.intro p{max-width:480px;line-height:1.5}
+.source{font:500 .75rem var(--mono)}
+.desk{margin-top:1.5rem;display:grid;grid-template-columns:minmax(240px,1fr) 2fr;border:1px solid var(--ink);background:var(--paper);min-height:440px;box-shadow:6px 6px 0 #cbc7b9}
+.queue{border-right:1px solid var(--ink);min-width:0}
+.queueHead{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.8rem;border-bottom:1px solid var(--ink)}
+.queueHead h2{font-size:1rem;margin:0}
+.queueHead button{white-space:nowrap;font-size:.8rem}
+.trialButton{display:grid;gap:.5rem;text-align:left;width:100%;border:0;border-bottom:1px solid var(--line);padding:1rem;overflow-wrap:anywhere}
+.trialButton[aria-pressed=true]{background:var(--green);box-shadow:inset 4px 0 var(--ink)}
+#older,#newest{margin:1rem}
+.detail{padding:clamp(1rem,3vw,2.8rem);min-width:0}
+.detail h2{font:400 clamp(1.9rem,4vw,3.4rem)/1.02 "Instrument Serif",Georgia,serif;margin:.4em 0;overflow-wrap:anywhere}
+.chip{display:inline-block;background:#e4e1d6;border:1px solid #888;padding:.3rem .6rem;font:500 .75rem var(--mono)}
+.chip.awarded,.chip.cleared,.primary{background:var(--green)}
+.facts{margin-top:1.3rem;border-top:1px solid var(--line)}
+.facts>div{padding:.5rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:9rem minmax(0,1fr);gap:.45rem}
+dt{color:var(--muted)}
+dd,.mono{margin:0;overflow-wrap:anywhere;font:.8rem var(--mono)}
+.next{font-size:.9rem}
+.buttons{display:flex;flex-wrap:wrap;gap:.6rem}
+.invitation{margin-top:1.2rem;border-top:1px solid var(--line);padding:.75rem 0 0;overflow-wrap:anywhere}
+summary{cursor:pointer;font-weight:600}
+.invitation p,.invitation a{font-size:.85rem;display:block;margin:.5rem 0}
+#notice{min-height:1.5em;overflow-wrap:anywhere}
+.evidence ul{list-style:none;padding:0;max-width:42rem}
+.evidence li{display:flex;gap:.5rem 1rem;justify-content:space-between;flex-wrap:wrap;border-top:1px solid var(--line);padding:.5rem 0}
+dialog{width:min(92vw,490px);border:1px solid var(--ink);background:var(--paper);padding:1.4rem}
+dialog::backdrop{background:#141923aa}
+dialog h2{margin:0 0 1rem}
+dialog p{overflow-wrap:anywhere}
+#fields{display:grid;gap:.65rem}
+label{display:grid;gap:.3rem}
+input{min-width:0;padding:.55rem}
+.walletRow{overflow-wrap:anywhere;text-align:left}
+@media(max-width:720px){.mast p{display:none}.desk{grid-template-columns:1fr}.queue{border-right:0;border-bottom:1px solid var(--ink)}.facts>div{grid-template-columns:1fr}}
