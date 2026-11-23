@@ -39,3 +39,9 @@ Run `python scripts/test_contract.py` for state-machine and registry-adapter tes
 `npm run verify` independently checks recorded transaction finality and execution, compares the exact deployed source with the repository file, and reads both final demo records using `latest-final`. `npm run verify:live` creates a separate Stable Studionet deployment and executes the scenario using distinct test signers. Keep its generated test keys and journal outside the repository. Rerunning with the same journal resumes the existing transactions.
 
 Earlier deployment addresses and their observed receipts are preserved in [release history](release-history.json).
+
+## Live examples
+
+- [Trial 1](https://xiaoyu7799.github.io/vendor-docket-genlayer/?trial=1) assigns pilot work order `VD-1-1` after a cleared registration. An uninvited wallet and a duplicate acceptance are rejected.
+- [Trial 2](https://xiaoyu7799.github.io/vendor-docket-genlayer/?trial=2) releases the slot after a lapsed registration. A follow-up invitation reuses the slot, and its independent review also blocks the lapsed LEI. Writes against the superseded invitation revision are rejected.
+- [Trial 3](https://xiaoyu7799.github.io/vendor-docket-genlayer/?trial=3) was opened by an in-browser session wallet after a Studionet faucet transfer. Its receipt and final trial record are included in the evidence.

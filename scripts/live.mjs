@@ -1,19 +1,28 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { createAccount, generatePrivateKey } from 'genlayer-js';
 import { calldataAddress, clientFor, execution, finalized, fund, leaderReceipt, read } from '../network.mjs';
 
-const keyFile = '../.vendor-docket-keys.json';
+const keyFile = process.env.VENDOR_DOCKET_KEYS ?? '../.vendor-docket-keys.json';
+const journal = process.env.VENDOR_DOCKET_JOURNAL ?? '../vendor-live-journal-v2.json';
+const lockFile = keyFile + '.lock';
+closeSync(openSync(lockFile, 'wx', 0o600));
+process.on('exit', () => unlinkSync(lockFile));
+process.on('SIGINT', () => process.exit(130));
+process.on('SIGTERM', () => process.exit(143));
 if (!existsSync(keyFile)) {
   writeFileSync(keyFile, JSON.stringify(Array.from({length: 3}, () => generatePrivateKey())), {mode: 0o600, flag: 'wx'});
 }
 const accounts = JSON.parse(readFileSync(keyFile)).map(key => createAccount(key));
 const [buyer, supplier, observer] = accounts.map(clientFor);
 const [buyerAddress, supplierAddress, observerAddress] = accounts.map(account => account.address);
-const journal = process.env.VENDOR_DOCKET_JOURNAL ?? '../vendor-live-journal-v2.json';
 const evidence = existsSync(journal) ? JSON.parse(readFileSync(journal)) : {transactions: {}, states: {}};
-const save = () => writeFileSync(journal, JSON.stringify(evidence, (_, value) => typeof value === 'bigint' ? String(value) : value, 2));
+const save = () => {
+  const temp = journal + '.tmp';
+  writeFileSync(temp, JSON.stringify(evidence, (_, value) => typeof value === 'bigint' ? String(value) : value, 2));
+  renameSync(temp, journal);
+};
 const source = readFileSync(new URL('../contracts/vendor_docket.py', import.meta.url));
 const digest = createHash('sha256').update(source).digest('hex');
 assert.equal(await buyer.getChainId(), 61999);
@@ -91,10 +100,10 @@ const flows = await Promise.allSettled([
   })(),
   (async () => {
     await write('open-secondary', buyer, 'open_trial', ['Digitize ten sample receiving slips and return an indexed pilot bundle.']);
-    await write('invite-lapsed', buyer, 'invite', [2n, calldataAddress(supplierAddress), '353800SZHNPYLZTIX835']);
-    await write('review-lapsed', supplier, 'review_invitation', [2n, 1n]);
+    await write('invite-lapsed', buyer, 'invite', [2n, calldataAddress(observerAddress), '353800SZHNPYLZTIX835']);
+    await write('review-lapsed', observer, 'review_invitation', [2n, 1n]);
     await snapshot('blocked', 2n, 'OPEN', 'BLOCKED');
-    await write('reject-blocked-accept', supplier, 'accept', [2n, 1n], false);
+    await write('reject-blocked-accept', observer, 'accept', [2n, 1n], false);
     await snapshot('afterBlockedAccept', 2n, 'OPEN', 'BLOCKED');
     assert.deepEqual(evidence.states.afterBlockedAccept, evidence.states.blocked);
     assert.equal(evidence.states.blocked.trial.work_order, '');

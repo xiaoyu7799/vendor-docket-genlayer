@@ -1,7 +1,4 @@
 {
-  "address": "0x6E5B6177f1191f77271eFe052A3B97B055E6e790",
-  "sourceSha256": "28d1cb0099d8c1effdf899c925d4665a21bf6055a059b7ba051732d42f9b35ba",
-  "deployedSourceMatches": true,
   "transactions": {
     "deploy": {
       "hash": "0xf88b173b2208255c502aea082627fbada8e6c6465289f20b7466a3608f680ec8",
@@ -25,6 +22,510 @@
         "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree",
         "0xee46B9Dc4c860149B1d140840284e5374854e746": "idle"
       }
+    },
+    "open-primary": {
+      "hash": "0x07f734c6a06d976b40df66f76de5fa56cf4512fcddbb9afe576edf7c31698986",
+      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "AAk=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            9
+          ],
+          "readable": "1"
+        }
+      },
+      "validatorVotes": {
+        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
+        "0x5e880d85a70De78dDEf86236d57c42e73F560615": "agree",
+        "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle",
+        "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "agree",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree"
+      }
+    },
+    "invite-issued": {
+      "hash": "0x52536063c4ef2b81325a65ac85f7a9f1a47543057fe29981804d4604e9fadbac",
+      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "AAA=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            0
+          ],
+          "readable": "null"
+        }
+      },
+      "validatorVotes": {
+        "0x23A15A452F19D1B616276fedC5B8B51d69082959": "agree",
+        "0x240d2d7c8DF220110c26cfFFC532479319Cca0dC": "agree",
+        "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle",
+        "0x813890bC5bEDEB4F5437570962379F04738F18Cb": "idle",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree"
+      }
+    },
+    "review-issued": {
+      "hash": "0x4894bb1222ab905002c45b0a19a664c86dc69034615331a485d70c94655dbd3b",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ADxDTEVBUkVE",
+        "status": "return",
+        "payload": {
+          "raw": [
+            60,
+            67,
+            76,
+            69,
+            65,
+            82,
+            69,
+            68
+          ],
+          "readable": "\"CLEARED\""
+        }
+      },
+      "validatorVotes": {
+        "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "idle",
+        "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "idle",
+        "0xee46B9Dc4c860149B1d140840284e5374854e746": "agree"
+      }
+    },
+    "reject-wrong-wallet": {
+      "hash": "0x6ded5022ed9b09b961dea384ffa713c8cc8e972687d968214e8bb63d43ad949d",
+      "sender": "0x12F3d54974CA1090049B880228bEAb8C31453690",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUNMRUFSRURfU1VQUExJRVJfUkVRVUlSRUQ=",
+        "status": "rollback",
+        "payload": "CLEARED_SUPPLIER_REQUIRED"
+      },
+      "validatorVotes": {
+        "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "agree",
+        "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "agree",
+        "0x813890bC5bEDEB4F5437570962379F04738F18Cb": "agree",
+        "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "idle",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "idle"
+      }
+    },
+    "award": {
+      "hash": "0xf81256ab8954ddf6d90854dc318c2131779db5dda75e2ecd6d8af6caf53cf641",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ADRWRC0xLTE=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            52,
+            86,
+            68,
+            45,
+            49,
+            45,
+            49
+          ],
+          "readable": "\"VD-1-1\""
+        }
+      },
+      "validatorVotes": {
+        "0x240d2d7c8DF220110c26cfFFC532479319Cca0dC": "agree",
+        "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "idle",
+        "0x6DC61b906F74F44612c5545b0b79486133B3556d": "idle",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "agree",
+        "0xBE58b43DF1d991e054F743Cc5571dD7029F3B888": "agree"
+      }
+    },
+    "reject-duplicate": {
+      "hash": "0xababbda2faa9e49b2858f4aa014f003a5575bec3ba36e1dbddc58c736d192b89",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUNMRUFSRURfU1VQUExJRVJfUkVRVUlSRUQ=",
+        "status": "rollback",
+        "payload": "CLEARED_SUPPLIER_REQUIRED"
+      },
+      "validatorVotes": {
+        "0x23A15A452F19D1B616276fedC5B8B51d69082959": "idle",
+        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+        "0x5e880d85a70De78dDEf86236d57c42e73F560615": "agree",
+        "0xBE58b43DF1d991e054F743Cc5571dD7029F3B888": "agree",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree"
+      }
+    },
+    "open-secondary": {
+      "hash": "0x640418e3063b0f5ff29f27b534f8056dd265f75a945954a9f3ae78123238a792",
+      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ABE=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            17
+          ],
+          "readable": "2"
+        }
+      },
+      "validatorVotes": {
+        "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "idle",
+        "0x534af64FFB6796Bc69aBf4C26c50788F1fFAfe56": "agree",
+        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "idle",
+        "0x813890bC5bEDEB4F5437570962379F04738F18Cb": "agree",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree"
+      }
+    },
+    "invite-lapsed": {
+      "hash": "0xd78b0724e5ffdfc4dab6637425b29b03262a4f1c84f56d0c6ba017538cefeee6",
+      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "AAA=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            0
+          ],
+          "readable": "null"
+        }
+      },
+      "validatorVotes": {
+        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "idle",
+        "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
+        "0x22Eda431B7fBC1216baE3b077a78c973a8719c58": "idle",
+        "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree"
+      }
+    },
+    "review-lapsed": {
+      "hash": "0x03bc13dee62e4bbbb8dff262a0967ce2f28f6a8d78c9bfb2bb60c3083b0b77fd",
+      "sender": "0x12F3d54974CA1090049B880228bEAb8C31453690",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ADxCTE9DS0VE",
+        "status": "return",
+        "payload": {
+          "raw": [
+            60,
+            66,
+            76,
+            79,
+            67,
+            75,
+            69,
+            68
+          ],
+          "readable": "\"BLOCKED\""
+        }
+      },
+      "validatorVotes": {
+        "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
+        "0x6DC61b906F74F44612c5545b0b79486133B3556d": "agree",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "idle",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "idle"
+      }
+    },
+    "follow-up-invitation": {
+      "hash": "0x9f8862b26642315d812e9406145c495ef675f9d80522c95a3ead2ee7ed6cb579",
+      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "AAA=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            0
+          ],
+          "readable": "null"
+        }
+      },
+      "validatorVotes": {
+        "0x534af64FFB6796Bc69aBf4C26c50788F1fFAfe56": "idle",
+        "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "agree",
+        "0x6DC61b906F74F44612c5545b0b79486133B3556d": "agree",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree"
+      }
+    },
+    "reject-stale-review": {
+      "hash": "0x41f8c2e3d4235bb41d5252348afd4029922f9498903d7173bcf4e67fed431232",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUlOVklUQVRJT05fQ0hBTkdFRA==",
+        "status": "rollback",
+        "payload": "INVITATION_CHANGED"
+      },
+      "validatorVotes": {
+        "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "idle",
+        "0x5e880d85a70De78dDEf86236d57c42e73F560615": "idle",
+        "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "agree",
+        "0xBE58b43DF1d991e054F743Cc5571dD7029F3B888": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree"
+      }
+    },
+    "reject-stale-accept": {
+      "hash": "0xf7c2e683e1315d265d97e3f9ce2aa7220c2358aa2c51aa50f424fe335ca7630c",
+      "sender": "0x12F3d54974CA1090049B880228bEAb8C31453690",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUlOVklUQVRJT05fQ0hBTkdFRA==",
+        "status": "rollback",
+        "payload": "INVITATION_CHANGED"
+      },
+      "validatorVotes": {
+        "0x22Eda431B7fBC1216baE3b077a78c973a8719c58": "agree",
+        "0x534af64FFB6796Bc69aBf4C26c50788F1fFAfe56": "agree",
+        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "idle",
+        "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "idle",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree"
+      }
+    },
+    "review-lapsed-follow-up": {
+      "hash": "0xb534ab2ade22154c23a296ebdb5114472057df61ef71aa9db11cbd30e71b5e2a",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ADxCTE9DS0VE",
+        "status": "return",
+        "payload": {
+          "raw": [
+            60,
+            66,
+            76,
+            79,
+            67,
+            75,
+            69,
+            68
+          ],
+          "readable": "\"BLOCKED\""
+        }
+      },
+      "validatorVotes": {
+        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
+        "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "idle",
+        "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "idle",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree",
+        "0xee46B9Dc4c860149B1d140840284e5374854e746": "agree"
+      }
+    },
+    "reject-blocked-accept": {
+      "hash": "0x9b1332eb411d69f0bcd75c68311452ccbbddd77af466ac7c6b53c21290c1ae4c",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUNMRUFSRURfU1VQUExJRVJfUkVRVUlSRUQ=",
+        "status": "rollback",
+        "payload": "CLEARED_SUPPLIER_REQUIRED"
+      },
+      "validatorVotes": {
+        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
+        "0x240d2d7c8DF220110c26cfFFC532479319Cca0dC": "agree",
+        "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "idle",
+        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "idle"
+      }
+    },
+    "reject-repeated-review": {
+      "hash": "0x088681aec609889000c7e750bb5a4b65302bda6d1b561de645e6773c9dc8eaaa",
+      "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "result": {
+        "raw": "AUFDVElWRV9TVVBQTElFUl9JTlZJVEFUSU9OX1JFUVVJUkVE",
+        "status": "rollback",
+        "payload": "ACTIVE_SUPPLIER_INVITATION_REQUIRED"
+      },
+      "validatorVotes": {
+        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
+        "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "agree",
+        "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "agree",
+        "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "agree"
+      }
+    },
+    "browser-signed-open": {
+      "hash": "0xaaa3ed32651def9dab86914fbc1bb27e5b90868c3590345c7213d4a51ee8751a",
+      "sender": "0xC12139dDE9816e9Ad2c588bf4ba9f43c6F4b93BF",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "result": {
+        "raw": "ABk=",
+        "status": "return",
+        "payload": {
+          "raw": [
+            25
+          ],
+          "readable": "3"
+        }
+      }
     }
-  }
+  },
+  "states": {
+    "cleared": {
+      "trial": {
+        "brief": "Catalogue a pilot collection of spare parts and deliver a reconciled inventory file.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 1,
+        "status": "CLEARED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": ""
+      },
+      "invitation": {
+        "decision": "CLEARED",
+        "entity": "ACTIVE",
+        "legal_name": "Bloomberg Finance L.P.",
+        "lei": "5493001KJTIIGC8Y1R12",
+        "registration": "ISSUED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-01-05T14:20:40Z"
+      }
+    },
+    "afterWrongWallet": {
+      "trial": {
+        "brief": "Catalogue a pilot collection of spare parts and deliver a reconciled inventory file.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 1,
+        "status": "CLEARED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": ""
+      },
+      "invitation": {
+        "decision": "CLEARED",
+        "entity": "ACTIVE",
+        "legal_name": "Bloomberg Finance L.P.",
+        "lei": "5493001KJTIIGC8Y1R12",
+        "registration": "ISSUED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-01-05T14:20:40Z"
+      }
+    },
+    "blocked": {
+      "trial": {
+        "brief": "Digitize ten sample receiving slips and return an indexed pilot bundle.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 2,
+        "status": "OPEN",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": ""
+      },
+      "invitation": {
+        "decision": "BLOCKED",
+        "entity": "ACTIVE",
+        "legal_name": "一般社団法人み空",
+        "lei": "353800SZHNPYLZTIX835",
+        "registration": "LAPSED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-10-09T00:00:00Z"
+      }
+    },
+    "awarded": {
+      "trial": {
+        "brief": "Catalogue a pilot collection of spare parts and deliver a reconciled inventory file.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 1,
+        "status": "AWARDED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": "VD-1-1"
+      },
+      "invitation": {
+        "decision": "CLEARED",
+        "entity": "ACTIVE",
+        "legal_name": "Bloomberg Finance L.P.",
+        "lei": "5493001KJTIIGC8Y1R12",
+        "registration": "ISSUED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-01-05T14:20:40Z"
+      }
+    },
+    "afterDuplicate": {
+      "trial": {
+        "brief": "Catalogue a pilot collection of spare parts and deliver a reconciled inventory file.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 1,
+        "status": "AWARDED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": "VD-1-1"
+      },
+      "invitation": {
+        "decision": "CLEARED",
+        "entity": "ACTIVE",
+        "legal_name": "Bloomberg Finance L.P.",
+        "lei": "5493001KJTIIGC8Y1R12",
+        "registration": "ISSUED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-01-05T14:20:40Z"
+      }
+    },
+    "firstBlocked": {
+      "trial": {
+        "brief": "Digitize ten sample receiving slips and return an indexed pilot bundle.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 1,
+        "status": "OPEN",
+        "supplier": "0x12F3d54974CA1090049B880228bEAb8C31453690",
+        "work_order": ""
+      },
+      "invitation": {
+        "decision": "BLOCKED",
+        "entity": "ACTIVE",
+        "legal_name": "一般社団法人み空",
+        "lei": "353800SZHNPYLZTIX835",
+        "registration": "LAPSED",
+        "supplier": "0x12F3d54974CA1090049B880228bEAb8C31453690",
+        "updated": "2026-10-09T00:00:00Z"
+      }
+    },
+    "afterBlockedAccept": {
+      "trial": {
+        "brief": "Digitize ten sample receiving slips and return an indexed pilot bundle.",
+        "buyer": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "current": 2,
+        "status": "OPEN",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "work_order": ""
+      },
+      "invitation": {
+        "decision": "BLOCKED",
+        "entity": "ACTIVE",
+        "legal_name": "一般社団法人み空",
+        "lei": "353800SZHNPYLZTIX835",
+        "registration": "LAPSED",
+        "supplier": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "updated": "2026-10-09T00:00:00Z"
+      }
+    },
+    "browserTrial": {
+      "brief": "Public demo: reconcile a sample receiving log and return a pilot inventory sheet.",
+      "buyer": "0xC12139dDE9816e9Ad2c588bf4ba9f43c6F4b93BF",
+      "current": 0,
+      "status": "OPEN",
+      "supplier": "0xC12139dDE9816e9Ad2c588bf4ba9f43c6F4b93BF",
+      "work_order": ""
+    }
+  },
+  "sourceSha256": "28d1cb0099d8c1effdf899c925d4665a21bf6055a059b7ba051732d42f9b35ba",
+  "address": "0x6E5B6177f1191f77271eFe052A3B97B055E6e790",
+  "deployedSourceMatches": true
 }

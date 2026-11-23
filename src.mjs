@@ -11,7 +11,9 @@ const notice = byId('notice');
 const wallets = [];
 let active;
 const requestedTrial = new URLSearchParams(window.location.search).get('trial');
-let selected = /^[1-9][0-9]{0,19}$/.test(requestedTrial ?? '') ? BigInt(requestedTrial) : undefined;
+let selected = /^[1-9][0-9]{0,19}$/.test(requestedTrial ?? '')
+  ? BigInt(requestedTrial)
+  : deployment.states?.awarded ? 1n : undefined;
 let currentTrial;
 let total = 0n;
 let first;
@@ -226,9 +228,24 @@ function renderDetail(trial) {
       'https://api.gleif.org/api/v1/lei-records/' + item.lei));
     if (item.legal_name) entry.append(node('p', item.legal_name + ' · ' + item.registration + ' / ' + item.entity),
       node('p', 'Registry update: ' + item.updated, 'mono'));
+    if (item.decision === 'CLEARED') entry.append(node('p', 'The record meets the ISSUED and ACTIVE requirement.'));
     if (item.decision === 'BLOCKED') entry.append(node('p', 'Policy requires ISSUED registration and ACTIVE entity status.'));
     if (item.decision === 'NOT_FOUND') entry.append(node('p', 'GLEIF returned no record for this LEI.'));
     detail.append(entry);
+  }
+  const demos = {
+    '1': [['review-issued', 'Clearance receipt'], ['award', 'Work order receipt']],
+    '2': [['review-lapsed-follow-up', 'Blocked review receipt'], ['reject-blocked-accept', 'Rejected acceptance receipt']],
+    '3': [['browser-signed-open', 'Browser signing receipt']],
+  };
+  const links = (demos[String(trial.id)] ?? []).flatMap(([key, label]) => {
+    const tx = deployment.transactions?.[key];
+    return tx ? [link(label + ' ↗', explorer + '/transactions/' + tx.hash)] : [];
+  });
+  if (links.length) {
+    const receipts = node('div', undefined, 'sampleLinks');
+    receipts.append(...links);
+    detail.append(receipts);
   }
 }
 async function update() {
@@ -292,7 +309,13 @@ if (address) {
     const descriptions = {
       'invite-issued': 'Invite supplier with active registration',
       'review-issued': 'Consensus clears the active LEI',
-      'review-lapsed': 'Consensus blocks the lapsed LEI',
+      'review-lapsed': 'Consensus blocks the first lapsed LEI',
+      'review-lapsed-follow-up': 'Consensus blocks the follow-up invitation',
+      'follow-up-invitation': 'Buyer issues a follow-up invitation',
+      'reject-stale-review': 'Review of superseded invitation rejected',
+      'reject-stale-accept': 'Acceptance of superseded invitation rejected',
+      'reject-repeated-review': 'Repeated review rejected',
+      'browser-signed-open': 'Browser wallet opens trial 3',
       'award': 'Supplier accepts the work order',
       'reject-wrong-wallet': 'Uninvited wallet rejected',
       'reject-duplicate': 'Duplicate acceptance rejected',
