@@ -28,7 +28,7 @@ class Registry:
             "registration": {"status": cls.registration, "lastUpdateDate": "2026-10-01"},
         }
         return SimpleNamespace(
-            status_code=cls.status,
+            status=cls.status,
             body=json.dumps({"data": {"attributes": record}}).encode(),
         )
 

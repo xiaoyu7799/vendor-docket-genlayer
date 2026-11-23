@@ -11,7 +11,7 @@ if (!existsSync(keyFile)) {
 const accounts = JSON.parse(readFileSync(keyFile)).map(key => createAccount(key));
 const [buyer, supplier, observer] = accounts.map(clientFor);
 const [buyerAddress, supplierAddress, observerAddress] = accounts.map(account => account.address);
-const journal = '../vendor-live-journal.json';
+const journal = process.env.VENDOR_DOCKET_JOURNAL ?? '../vendor-live-journal-v2.json';
 const evidence = existsSync(journal) ? JSON.parse(readFileSync(journal)) : {transactions: {}, states: {}};
 const save = () => writeFileSync(journal, JSON.stringify(evidence, (_, value) => typeof value === 'bigint' ? String(value) : value, 2));
 const source = readFileSync(new URL('../contracts/vendor_docket.py', import.meta.url));
@@ -76,7 +76,7 @@ async function snapshot(label, id, status, decision) {
 await write('open-primary', buyer, 'open_trial', ['Catalogue a pilot collection of spare parts and deliver a reconciled inventory file.']);
 const flows = await Promise.allSettled([
   (async () => {
-    await write('invite-issued-typed', buyer, 'invite', [1n, calldataAddress(supplierAddress), '5493001KJTIIGC8Y1R12']);
+    await write('invite-issued', buyer, 'invite', [1n, calldataAddress(supplierAddress), '5493001KJTIIGC8Y1R12']);
     await write('review-issued', supplier, 'review_invitation', [1n, 1n]);
     if (!evidence.states.cleared) await snapshot('cleared', 1n, 'CLEARED', 'CLEARED');
     await write('reject-wrong-wallet', observer, 'accept', [1n, 1n], false);

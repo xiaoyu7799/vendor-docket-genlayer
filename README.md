@@ -31,3 +31,11 @@ sha256sum contracts/vendor_docket.py
 ```
 
 The runner is pinned in the first line of the contract. The site uses `deployment.json` for the contract address and recorded receipts.
+
+## Reproducible checks
+
+Run `python scripts/test_contract.py` for state-machine and registry-adapter tests with controlled failure inputs. Those tests cover missing records, interrupted or incomplete responses, disagreement, duplicate acceptance, and stale invitation numbers. They do not replace Studionet receipts.
+
+`npm run verify` independently checks recorded transaction finality and execution, compares the exact deployed source with the repository file, and reads both final demo records using `latest-final`. `npm run verify:live` creates a separate Stable Studionet deployment and executes the scenario using distinct test signers. Keep its generated test keys and journal outside the repository. Rerunning with the same journal resumes the existing transactions.
+
+Earlier deployment addresses and their observed receipts are preserved in [release history](release-history.json).

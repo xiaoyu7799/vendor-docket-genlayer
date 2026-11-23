@@ -29,9 +29,9 @@ class Invitation:
 def observe(lei: str) -> list[str]:
     url = "https://api.gleif.org/api/v1/lei-records/" + lei
     response = gl.nondet.web.get(url)
-    if response.status_code == 404:
+    if response.status == 404:
         return ["NOT_FOUND", "", "", "", ""]
-    if response.status_code != 200:
+    if response.status != 200 or response.body is None:
         raise gl.vm.UserError("GLEIF_UNAVAILABLE")
     record = json.loads(response.body.decode("utf-8"))["data"]["attributes"]
     if record["lei"] != lei:

@@ -1,5 +1,5 @@
 import { createAccount } from 'genlayer-js';
-import { calldataAddress, clientFor, execution, explorer, finalized, fund, read } from './network.mjs';
+import { calldataAddress, clientFor, execution, explorer, finalized, fund, leaderReceipt, read } from './network.mjs';
 import deployment from './deployment.json';
 import './style.css';
 
@@ -10,7 +10,8 @@ const dialog = byId('dialog');
 const notice = byId('notice');
 const wallets = [];
 let active;
-let selected;
+const requestedTrial = new URLSearchParams(window.location.search).get('trial');
+let selected = /^[1-9][0-9]{0,19}$/.test(requestedTrial ?? '') ? BigInt(requestedTrial) : undefined;
 let currentTrial;
 let total = 0n;
 let first;
@@ -92,6 +93,21 @@ byId('wallet').onclick = () => {
     update().catch(error => inform(errorText(error)));
   }));
   if (active) {
+    const walletInfo = node('p', 'Reading test GEN balance…', 'mono');
+    const walletAddress = active.address;
+    clientFor(active).getBalance({address: walletAddress}).then(balance => {
+      const whole = balance / 10n ** 18n;
+      const decimals = (balance % (10n ** 18n)).toString().padStart(18, '0').replace(/0+$/, '');
+      walletInfo.textContent = whole + (decimals ? '.' + decimals : '') + ' test GEN · 61999';
+    }).catch(error => { walletInfo.textContent = errorText(error); });
+    fields.push(walletInfo, button('Copy active address', async event => {
+      try {
+        await navigator.clipboard.writeText(walletAddress);
+        event.currentTarget.textContent = 'Address copied';
+      } catch {
+        inform('Copy the full address from the wallet list.');
+      }
+    }));
     fields.push(button('Fund active wallet', async event => {
       event.currentTarget.disabled = true;
       try {
@@ -133,12 +149,15 @@ async function send(method, args, label) {
     hash = await client.writeContract({address, functionName: method, args, value: 0n, leaderOnly: false, fees: await client.estimateTransactionFees()});
     inform('Submitted. Waiting for consensus and finality…', hash);
     const receipt = await finalized(client, hash);
+    const leader = leaderReceipt(receipt);
     const status = receipt.statusName ?? (receipt.status === 7 ? "FINALIZED" : receipt.status);
     if (status !== 'FINALIZED' || execution(receipt) !== 'SUCCESS') {
-      throw new Error(status + ' / ' + (execution(receipt) ?? 'execution result unavailable'));
+      throw new Error([status, execution(receipt) ?? 'execution result unavailable',
+        typeof leader?.result?.payload === 'string' ? leader.result.payload : ''].filter(Boolean).join(' / '));
     }
     if (method === 'open_trial') {
-      selected = BigInt(await read(client, address, 'get_count'));
+      const trialNumber = leader?.result?.payload?.readable;
+      selected = BigInt(/^\d+$/.test(trialNumber ?? '') ? trialNumber : await read(client, address, 'get_count'));
       first = selected;
     }
     inform('Finalized · Success. Reading chain state…', hash);
@@ -222,7 +241,8 @@ async function update() {
     byId('detail').replaceChildren(node('h2', 'No trials yet'));
     return;
   }
-  first ??= total;
+  if (selected && selected > total) selected = undefined;
+  first ??= selected && selected + 7n < total ? selected + 7n : total;
   selected ??= total;
   const ids = Array.from({length: Number(first < 8n ? first : 8n)}, (_, index) => first - BigInt(index));
   const trials = await Promise.all(ids.map(async id => [id, await read(publicClient, address, 'get_trial', [id])]));
@@ -260,10 +280,27 @@ byId('older').onclick = () => {
 const evidence = byId('evidence');
 if (address) {
   evidence.append(node('h2', 'Studionet evidence'), link('Contract ↗', explorer + '/address/' + address));
+  if (deployment.states?.awarded && deployment.states?.blocked) {
+    evidence.append(node('p', 'The trials use test wallets and real public registry records. They do not represent the named entities.'));
+    const samples = node('div', undefined, 'sampleLinks');
+    samples.append(link('Trial 1 · Work order issued', '?trial=1'), link('Trial 2 · Slot released', '?trial=2'));
+    evidence.append(samples);
+  }
   const rows = node('ul');
   for (const [label, tx] of Object.entries(deployment.transactions ?? {})) {
     const line = node('li');
-    line.append(link(label.replaceAll('-', ' '), explorer + '/transactions/' + tx.hash), node('span', tx.status + ' / ' + tx.execution, 'mono'));
+    const descriptions = {
+      'invite-issued': 'Invite supplier with active registration',
+      'review-issued': 'Consensus clears the active LEI',
+      'review-lapsed': 'Consensus blocks the lapsed LEI',
+      'award': 'Supplier accepts the work order',
+      'reject-wrong-wallet': 'Uninvited wallet rejected',
+      'reject-duplicate': 'Duplicate acceptance rejected',
+      'reject-blocked-accept': 'Blocked supplier cannot accept',
+    };
+    const receipt = link(descriptions[label] ?? label.replaceAll('-', ' '), explorer + '/transactions/' + tx.hash);
+    receipt.title = 'Sender: ' + tx.sender;
+    line.append(receipt, node('span', tx.status + ' / ' + tx.execution, 'mono'));
     rows.append(line);
   }
   evidence.append(rows);

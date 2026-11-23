@@ -53,3 +53,4 @@ label{display:grid;gap:.3rem}
 input{min-width:0;padding:.55rem}
 .walletRow{overflow-wrap:anywhere;text-align:left}
 @media(max-width:720px){.mast p{display:none}.desk{grid-template-columns:1fr}.queue{border-right:0;border-bottom:1px solid var(--ink)}.facts>div{grid-template-columns:1fr}}
+.sampleLinks{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;margin:1.1rem 0;font-weight:700}

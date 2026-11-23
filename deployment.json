@@ -1,14 +1,13 @@
 {
-  "address": "0x9FCaE006eEd422190B6ce61ef6781868665491d3",
-  "sourceSha256": "b5cd4a5b49d87675af3bd2d3613965eca12c2f562eba9999d66e742d486c8690",
+  "address": "0x6E5B6177f1191f77271eFe052A3B97B055E6e790",
+  "sourceSha256": "28d1cb0099d8c1effdf899c925d4665a21bf6055a059b7ba051732d42f9b35ba",
   "deployedSourceMatches": true,
   "transactions": {
     "deploy": {
-      "hash": "0x2927d322ff0bfa206f60e809ba81b41eaf656cfbe1f5ed8ac6ae7736185a454b",
+      "hash": "0xf88b173b2208255c502aea082627fbada8e6c6465289f20b7466a3608f680ec8",
       "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
       "status": "FINALIZED",
       "execution": "SUCCESS",
-      "error": null,
       "result": {
         "raw": "AAA=",
         "status": "return",
@@ -20,43 +19,12 @@
         }
       },
       "validatorVotes": {
-        "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
-        "0x22Eda431B7fBC1216baE3b077a78c973a8719c58": "idle",
-        "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "agree",
-        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
-        "0xee46B9Dc4c860149B1d140840284e5374854e746": "agree"
-      }
-    },
-    "open-primary": {
-      "hash": "0x9639ee3652194c4fc128f60536216ec440f2c61804bfefe126054b658d3eec8b",
-      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
-      "status": "FINALIZED",
-      "execution": "SUCCESS",
-      "error": null,
-      "result": {
-        "raw": "AAk=",
-        "status": "return",
-        "payload": {
-          "raw": [
-            9
-          ],
-          "readable": "1"
-        }
-      },
-      "validatorVotes": {
-        "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
         "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "agree",
-        "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
-        "0x6DC61b906F74F44612c5545b0b79486133B3556d": "idle",
-        "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle"
+        "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "agree",
+        "0x725Ab89db6A9DD886Ba71Bc5E63a01070C325bE3": "agree",
+        "0xe358f855C96d8E7243836cf986eb037175B9467e": "agree",
+        "0xee46B9Dc4c860149B1d140840284e5374854e746": "idle"
       }
-    },
-    "invite-issued": {
-      "hash": "0x7bd537169d8cdbb121204d6cfece3e70bdd5017b7606866cbdfefd511fc398bc",
-      "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
-      "status": "FINALIZED",
-      "execution": "ERROR",
-      "error": null
     }
   }
 }

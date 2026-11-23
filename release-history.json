@@ -1,0 +1,207 @@
+[
+  {
+    "transactions": {
+      "deploy": {
+        "hash": "0x2927d322ff0bfa206f60e809ba81b41eaf656cfbe1f5ed8ac6ae7736185a454b",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "error": null,
+        "result": {
+          "raw": "AAA=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              0
+            ],
+            "readable": "null"
+          }
+        },
+        "validatorVotes": {
+          "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
+          "0x22Eda431B7fBC1216baE3b077a78c973a8719c58": "idle",
+          "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "agree",
+          "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+          "0xee46B9Dc4c860149B1d140840284e5374854e746": "agree"
+        }
+      },
+      "open-primary": {
+        "hash": "0x9639ee3652194c4fc128f60536216ec440f2c61804bfefe126054b658d3eec8b",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "error": null,
+        "result": {
+          "raw": "AAk=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              9
+            ],
+            "readable": "1"
+          }
+        },
+        "validatorVotes": {
+          "0x19a02f95418A6c76091CDA37C4fc542CA82805c9": "agree",
+          "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "agree",
+          "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+          "0x6DC61b906F74F44612c5545b0b79486133B3556d": "idle",
+          "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle"
+        }
+      },
+      "invite-issued": {
+        "hash": "0x7bd537169d8cdbb121204d6cfece3e70bdd5017b7606866cbdfefd511fc398bc",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "ERROR",
+        "error": null
+      },
+      "invite-issued-typed": {
+        "hash": "0x330f043f0b7a960a353ae97f4971fe9180fe42c91907a5c6dee71b415e130de1",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "result": {
+          "raw": "AAA=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              0
+            ],
+            "readable": "null"
+          }
+        },
+        "validatorVotes": {
+          "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "agree",
+          "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "idle",
+          "0x6DC61b906F74F44612c5545b0b79486133B3556d": "agree",
+          "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "agree",
+          "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "agree"
+        }
+      },
+      "open-secondary": {
+        "hash": "0x1dde557f41cb5a09eb50c0eaa919f2610f4f944ffc39a6a7aff889d0cbc0ac62",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "result": {
+          "raw": "ABE=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              17
+            ],
+            "readable": "2"
+          }
+        },
+        "validatorVotes": {
+          "0x21e4F7ba6Ec0fbf70C019fbc0F9A797c3ed1F969": "agree",
+          "0x240d2d7c8DF220110c26cfFFC532479319Cca0dC": "agree",
+          "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "idle",
+          "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+          "0x5e880d85a70De78dDEf86236d57c42e73F560615": "idle"
+        }
+      },
+      "review-issued": {
+        "hash": "0xb1d0d508c1eb704a65c3c6ba0b00f716232e22773b7aa2baef0b999d6a276bb0",
+        "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "status": "FINALIZED",
+        "execution": "ERROR",
+        "result": {
+          "raw": "AmV4aXRfY29kZSAx",
+          "status": "contract_error",
+          "payload": "exit_code 1"
+        },
+        "validatorVotes": {
+          "0x4eeaD269a60bB89c98a23c1BCd0bd101CafD90E0": "agree",
+          "0x62718FbDf0509A398aA525C152D60c1F7A9d33D3": "agree",
+          "0x6DC61b906F74F44612c5545b0b79486133B3556d": "agree",
+          "0x813890bC5bEDEB4F5437570962379F04738F18Cb": "idle",
+          "0xE74a9088aD4d6dBf3C8cABcC0B91072d2a8c8afa": "idle"
+        }
+      },
+      "invite-lapsed": {
+        "hash": "0xa42cf51cad8bd0e2322f303e75085f093101a80a5b00da4b340c7855694d809f",
+        "sender": "0x708105F1a1d2a20AeAfB7945d96a7181aEefbcB7",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "result": {
+          "raw": "AAA=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              0
+            ],
+            "readable": "null"
+          }
+        },
+        "validatorVotes": {
+          "0x534af64FFB6796Bc69aBf4C26c50788F1fFAfe56": "idle",
+          "0x5744305308D62592B7De585e1999c4Ea51E03C29": "agree",
+          "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle",
+          "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "agree",
+          "0xBE58b43DF1d991e054F743Cc5571dD7029F3B888": "agree"
+        }
+      },
+      "review-lapsed": {
+        "hash": "0xcd5ae121edcd709920d3db754395195cddf2a7fe3ab06dcbb2734c23da83e972",
+        "sender": "0x82052842dF640f3f22D366b5d24A1844802a5c95",
+        "status": "FINALIZED",
+        "execution": "ERROR",
+        "result": {
+          "raw": "AmV4aXRfY29kZSAx",
+          "status": "contract_error",
+          "payload": "exit_code 1"
+        },
+        "validatorVotes": {
+          "0x1B490819e040562a5fb40CD64B1c70D4419c38d1": "agree",
+          "0x5e880d85a70De78dDEf86236d57c42e73F560615": "agree",
+          "0x6fe9DE3d0adc76D6416A13CD8107aaE49A3CF98F": "idle",
+          "0x88E148Da14d45c5a5DD2DB25E776eBCBCe0Df539": "agree",
+          "0xBE58b43DF1d991e054F743Cc5571dD7029F3B888": "idle"
+        }
+      },
+      "browser-signed-open": {
+        "hash": "0x9a9e4ec755196fba467f83b64270c17a79377b3d9c023b42958bb406ad744b3a",
+        "sender": "0xF87BF96398903Ac44aFFeBa9BA0093D902Fde45c",
+        "status": "FINALIZED",
+        "execution": "SUCCESS",
+        "result": {
+          "raw": "ABk=",
+          "status": "return",
+          "payload": {
+            "raw": [
+              25
+            ],
+            "readable": "3"
+          }
+        }
+      }
+    },
+    "states": {
+      "browserTrial": {
+        "brief": "Browser acceptance: reconcile a sample receiving log and return a pilot inventory sheet.",
+        "buyer": "0xF87BF96398903Ac44aFFeBa9BA0093D902Fde45c",
+        "current": 0,
+        "status": "OPEN",
+        "supplier": "0xF87BF96398903Ac44aFFeBa9BA0093D902Fde45c",
+        "work_order": ""
+      }
+    },
+    "sourceSha256": "b5cd4a5b49d87675af3bd2d3613965eca12c2f562eba9999d66e742d486c8690",
+    "address": "0x9FCaE006eEd422190B6ce61ef6781868665491d3",
+    "deployedSourceMatches": true,
+    "preConsensusRejections": [
+      {
+        "hash": "0x7a03ec358a501170c4798639d388148970892b0796dbd7d87dcc6411f8949dbd",
+        "reason": "FeesDistributionMissing"
+      },
+      {
+        "hash": "0x8b0a1c68dbcd748d7f1710c596befca939e54e1f7373d2f0532fd8f9cc37353c",
+        "reason": "FeeValueMustBeNonZero(1)"
+      }
+    ],
+    "sourceCommit": "0d80097b37defa6b21b3bd8f4f2caf6cf213e27e",
+    "releaseNote": "Superseded after both registry review calls returned contract errors. The pinned SDK response uses status. This release read status_code."
+  }
+]
