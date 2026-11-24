@@ -182,7 +182,7 @@ const nextSteps = {
   OPEN: 'The buyer can invite a supplier. A blocked or withdrawn invitation releases the slot.',
   INVITED: 'The invited supplier can submit its LEI for independent verification. The buyer can withdraw.',
   CLEARED: 'The invited supplier can accept the trial. The buyer can withdraw before acceptance.',
-  AWARDED: 'The trial is assigned. The work order below is the supplier’s receipt.',
+  AWARDED: 'The trial is assigned. The work order identifies the assignment.',
 };
 
 function renderDetail(trial) {
@@ -236,14 +236,15 @@ function renderDetail(trial) {
   const demos = {
     '1': [['review-issued', 'Clearance receipt'], ['award', 'Work order receipt']],
     '2': [['review-lapsed-follow-up', 'Blocked review receipt'], ['reject-blocked-accept', 'Rejected acceptance receipt']],
-    '3': [['browser-signed-open', 'Browser signing receipt']],
+    [deployment.browserWorkflow?.id]: [['browser-final-review', 'Clearance receipt'], ['browser-final-accept', 'Work order receipt']],
   };
   const links = (demos[String(trial.id)] ?? []).flatMap(([key, label]) => {
     const tx = deployment.transactions?.[key];
     return tx ? [link(label + ' ↗', explorer + '/transactions/' + tx.hash)] : [];
   });
   if (links.length) {
-    const receipts = node('div', undefined, 'sampleLinks');
+    const receipts = node('nav', undefined, 'sampleLinks');
+    receipts.setAttribute('aria-label', 'Trial receipts');
     receipts.append(...links);
     detail.append(receipts);
   }
@@ -294,39 +295,17 @@ byId('older').onclick = () => {
   selected = first;
   update().catch(error => inform(errorText(error)));
 };
-const evidence = byId('evidence');
-if (address) {
-  evidence.append(node('h2', 'Studionet evidence'), link('Contract ↗', explorer + '/address/' + address));
-  if (deployment.states?.awarded && deployment.states?.blocked) {
-    evidence.append(node('p', 'The trials use test wallets and real public registry records. They do not represent the named entities.'));
-    const samples = node('div', undefined, 'sampleLinks');
-    samples.append(link('Trial 1 · Work order issued', '?trial=1'), link('Trial 2 · Slot released', '?trial=2'));
-    evidence.append(samples);
+if (deployment.browserWorkflow?.id && deployment.states?.blocked) {
+  const examples = byId('examples');
+  for (const [id, label] of [
+    [deployment.browserWorkflow.id, 'Example · Work order issued'],
+    [2, 'Example · Supplier blocked'],
+  ]) {
+    const example = node('a', label);
+    example.href = '?trial=' + id;
+    examples.append(example);
   }
-  const rows = node('ul');
-  for (const [label, tx] of Object.entries(deployment.transactions ?? {})) {
-    const line = node('li');
-    const descriptions = {
-      'invite-issued': 'Invite supplier with active registration',
-      'review-issued': 'Consensus clears the active LEI',
-      'review-lapsed': 'Consensus blocks the first lapsed LEI',
-      'review-lapsed-follow-up': 'Consensus blocks the follow-up invitation',
-      'follow-up-invitation': 'Buyer issues a follow-up invitation',
-      'reject-stale-review': 'Review of superseded invitation rejected',
-      'reject-stale-accept': 'Acceptance of superseded invitation rejected',
-      'reject-repeated-review': 'Repeated review rejected',
-      'browser-signed-open': 'Browser wallet opens trial 3',
-      'award': 'Supplier accepts the work order',
-      'reject-wrong-wallet': 'Uninvited wallet rejected',
-      'reject-duplicate': 'Duplicate acceptance rejected',
-      'reject-blocked-accept': 'Blocked supplier cannot accept',
-    };
-    const receipt = link(descriptions[label] ?? label.replaceAll('-', ' '), explorer + '/transactions/' + tx.hash);
-    receipt.title = 'Sender: ' + tx.sender;
-    line.append(receipt, node('span', tx.status + ' / ' + tx.execution, 'mono'));
-    rows.append(line);
-  }
-  evidence.append(rows);
+  examples.hidden = false;
 }
 displayWallet();
 update().catch(error => inform(errorText(error)));
