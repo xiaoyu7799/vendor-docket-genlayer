@@ -1,4 +1,5 @@
-import { createAccount } from 'genlayer-js';
+import { connectedSigner } from './wallet.mjs';
+import { walletPanel } from './wallet-panel.mjs';
 import { calldataAddress, clientFor, execution, explorer, finalized, fund, leaderReceipt, read } from './network.mjs';
 import deployment from './deployment.json';
 import './style.css';
@@ -8,13 +9,14 @@ const publicClient = clientFor();
 const address = deployment.address;
 const dialog = byId('dialog');
 const notice = byId('notice');
-const wallets = [];
 let active;
 const requestedTrial = new URLSearchParams(window.location.search).get('trial');
 let selected = /^[1-9][0-9]{0,19}$/.test(requestedTrial ?? '')
   ? BigInt(requestedTrial)
   : deployment.states?.awarded ? 1n : undefined;
 let currentTrial;
+let view = 'docket';
+let records = [];
 let total = 0n;
 let first;
 let busy = false;
@@ -51,17 +53,18 @@ function errorText(error) {
   return error.shortMessage ?? error.message ?? String(error);
 }
 function displayWallet() {
-  byId('wallet').textContent = active ? active.address.slice(0, 8) + '…' + active.address.slice(-4) : 'Test wallets';
-  byId('open').disabled = !active || !address || busy;
+  byId('wallet').disabled = busy;
+  byId('open').disabled = !active?.ready || !address || busy;
 }
 function modal(title, fields, handler, signing = true) {
   byId('dialogTitle').textContent = title;
   byId('fields').replaceChildren(...fields);
   byId('signingContext').textContent = signing
     ? 'Stable Studionet (61999) · Signing as ' + active.address
-    : 'Session-only Studionet wallets. Use test funds only. Closing or refreshing the page clears all keys.';
+    : '';
   byId('confirm').hidden = !handler;
-  action = handler;
+  const wallet = active;
+  action = values => active === wallet ? handler?.(values) : inform('Wallet changed. Reopen the action to sign.');
   dialog.showModal();
 }
 function field(label, name, attrs) {
@@ -80,72 +83,30 @@ byId('actionForm').onsubmit = event => {
   dialog.close();
   action?.(values);
 };
-byId('wallet').onclick = () => {
-  const fields = wallets.map(wallet => button(wallet.address + (wallet === active ? ' · Active' : ''), () => {
+walletPanel({
+  client: publicClient, fund, report: inform,
+  change(wallet) {
     active = wallet;
-    dialog.close();
-    displayWallet();
-    update().catch(error => inform(errorText(error)));
-  }, 'walletRow'));
-  fields.push(button('Create session wallet', () => {
-    active = createAccount();
-    wallets.push(active);
-    dialog.close();
-    displayWallet();
-    update().catch(error => inform(errorText(error)));
-  }));
-  if (active) {
-    const walletInfo = node('p', 'Reading test GEN balance…', 'mono');
-    const walletAddress = active.address;
-    clientFor(active).getBalance({address: walletAddress}).then(balance => {
-      const whole = balance / 10n ** 18n;
-      const decimals = (balance % (10n ** 18n)).toString().padStart(18, '0').replace(/0+$/, '');
-      walletInfo.textContent = whole + (decimals ? '.' + decimals : '') + ' test GEN · 61999';
-    }).catch(error => { walletInfo.textContent = errorText(error); });
-    fields.push(walletInfo, button('Copy active address', async event => {
-      try {
-        await navigator.clipboard.writeText(walletAddress);
-        event.currentTarget.textContent = 'Address copied';
-      } catch {
-        inform('Copy the full address from the wallet list.');
-      }
-    }));
-    fields.push(button('Fund active wallet', async event => {
-      event.currentTarget.disabled = true;
-      try {
-        const client = clientFor(active);
-        await fund(client, active.address);
-        inform('Test balance: ' + await client.getBalance({address: active.address}) + ' base units');
-        dialog.close();
-      } catch (error) {
-        inform(errorText(error));
-        dialog.close();
-      }
-    }));
-    fields.push(button('Disconnect', () => {
-      active = undefined;
-      dialog.close();
-      displayWallet();
-      update().catch(error => inform(errorText(error)));
-    }));
-    fields.push(button('Clear session wallets', () => {
-      active = undefined;
-      wallets.length = 0;
-      dialog.close();
-      displayWallet();
-      update().catch(error => inform(errorText(error)));
-    }));
-  }
-  modal('Test wallets', fields, null, false);
-};
+    update().catch(error => inform(error.message));
+  },
+});
 async function send(method, args, label) {
-  if (busy || !active || !address) return;
+  if (busy || !address) return;
+  if (!active?.ready) return inform('Connect a wallet on Stable Studionet first.');
   busy = true;
   displayWallet();
   byId('detail').querySelectorAll('button').forEach(element => element.disabled = true);
   let hash;
+  let confirmed = false;
   try {
-    const client = clientFor(active);
+    const wallet = active;
+    const submitted = tx => {
+      hash = tx;
+      inform('Submitted. Waiting for consensus and finality…', hash);
+    };
+    const client = wallet.external
+      ? connectedSigner(wallet, () => active === wallet, submitted)
+      : clientFor(wallet.account);
     if (await client.getChainId() !== 61999) throw new Error('RPC chain does not match Studionet.');
     inform('Signing ' + label + '…');
     hash = await client.writeContract({address, functionName: method, args, value: 0n, leaderOnly: false, fees: await client.estimateTransactionFees()});
@@ -157,6 +118,7 @@ async function send(method, args, label) {
       throw new Error([status, execution(receipt) ?? 'execution result unavailable',
         typeof leader?.result?.payload === 'string' ? leader.result.payload : ''].filter(Boolean).join(' / '));
     }
+    confirmed = true;
     if (method === 'open_trial') {
       const trialNumber = leader?.result?.payload?.readable;
       selected = BigInt(/^\d+$/.test(trialNumber ?? '') ? trialNumber : await read(client, address, 'get_count'));
@@ -166,11 +128,11 @@ async function send(method, args, label) {
     await update();
     inform('Finalized · Success. Final chain state refreshed.', hash);
   } catch (error) {
-    inform(errorText(error), hash);
+    inform((confirmed ? 'FINALIZED / SUCCESS · Final state read failed. Refresh the trial. ' : '') + errorText(error), hash);
   } finally {
     busy = false;
     displayWallet();
-    byId('trials').querySelectorAll('button').forEach(element => element.disabled = false);
+    renderRegister();
     if (currentTrial) renderDetail(currentTrial);
   }
 }
@@ -203,7 +165,7 @@ function renderDetail(trial) {
   const controls = node('div', undefined, 'buttons');
   if (trial.status === 'OPEN' && matches(trial.buyer)) {
     controls.append(button('Invite supplier', () => modal('Reserve the trial slot', [
-      field('Supplier test wallet', 'supplier', {pattern: '0x[0-9a-fA-F]{40}'}),
+      field('Supplier wallet address', 'supplier', {pattern: '0x[0-9a-fA-F]{40}'}),
       field('Legal Entity Identifier', 'lei', {pattern: '[A-Z0-9]{18}[0-9]{2}', maxlength: '20'}),
     ], data => send('invite', [trial.id, calldataAddress(data.get('supplier')), data.get('lei')], 'invite supplier')), 'primary'));
   }
@@ -219,7 +181,8 @@ function renderDetail(trial) {
   if (['INVITED', 'CLEARED'].includes(trial.status) && matches(trial.buyer)) {
     offer('Withdraw invitation', 'withdraw', 'Release the slot so the buyer can issue another invitation.');
   }
-  if (controls.childElementCount) detail.append(controls);
+  if (active?.ready && controls.childElementCount) detail.append(controls);
+  if (trial.history.length) detail.append(node('h3', 'Invitation history'));
   for (const [index, item] of trial.history) {
     const entry = node('details', undefined, 'invitation');
     entry.open = index === BigInt(trial.current);
@@ -249,6 +212,68 @@ function renderDetail(trial) {
     detail.append(receipts);
   }
 }
+const columns = {
+  docket: ['Trial', 'Deliverable', 'Status', 'Invitation'],
+  registry: ['Trial', 'Legal entity', 'LEI', 'Registry status'],
+  verification: ['Trial', 'LEI', 'Decision', 'Source updated'],
+  orders: ['Trial', 'Work order', 'Deliverable', 'Assignee'],
+};
+function renderRegister() {
+  byId('metrics').replaceChildren(...[
+    ['Total trials', total],
+    ['Pending verification · this page', records.filter(record => record.status === 'INVITED').length],
+    ['Work orders · this page', records.filter(record => record.status === 'AWARDED').length],
+  ].map(([label,value])=> {
+    const card=node('div');
+    card.append(node('span',label),node('strong',String(value)));
+    return card;
+  }));
+  const header=node('tr');
+  for(const label of columns[view]){
+    const th=node('th',label);
+    th.scope='col';
+    header.append(th);
+  }
+  byId('tableHead').replaceChildren(header);
+  const visible=records.filter(record=>view==='docket' || (view==='orders' ? record.work_order : record.latestInvitation));
+  const rows=visible.map(record=>{
+    const row=node('tr');
+    if(selected===record.id) row.className='selected';
+    const id=node('td');
+    const open=button('VD-'+record.id,()=>{
+      selected=record.id;
+      update().catch(error=>inform(errorText(error)));
+    },'record-button');
+    open.setAttribute('aria-pressed',String(selected===record.id));
+    id.append(open);
+    const item=record.latestInvitation;
+    const cells={
+      docket:[record.brief,record.status,item?.decision ?? '—'],
+      registry:[item?.legal_name || 'Awaiting registry check',item?.lei,item?.registration || '—'],
+      verification:[item?.lei,item?.decision,item?.updated || '—'],
+      orders:[record.work_order,record.brief,record.supplier],
+    };
+    row.append(id,...cells[view].map(value=>node('td',value)));
+    return row;
+  });
+  if(!rows.length){
+    const row=node('tr');
+    const cell=node('td','No matching records on this page.');
+    cell.colSpan=4;
+    row.append(cell);
+    rows.push(row);
+  }
+  byId('trials').replaceChildren(...rows);
+}
+for(const control of byId('views').querySelectorAll('button')){
+  control.onclick=()=>{
+    view=control.dataset.view;
+    for(const option of byId('views').querySelectorAll('button')){
+      option.setAttribute('aria-pressed',String(option===control));
+    }
+    renderRegister();
+  };
+}
 async function update() {
   if (!address) {
     byId('detail').replaceChildren(node('h2', 'Deployment pending'));
@@ -264,12 +289,11 @@ async function update() {
   selected ??= total;
   const ids = Array.from({length: Number(first < 8n ? first : 8n)}, (_, index) => first - BigInt(index));
   const trials = await Promise.all(ids.map(async id => [id, await read(publicClient, address, 'get_trial', [id])]));
-  byId('trials').replaceChildren(...trials.map(([id, trial]) => {
-    const entry = button('', () => { selected = id; update().catch(error => inform(errorText(error))); }, 'trialButton');
-    entry.setAttribute('aria-pressed', String(selected === id));
-    entry.append(node('span', 'VD / ' + id + ' · ' + trial.status, 'kicker'), node('strong', trial.brief));
-    return entry;
-  }));
+  records = await Promise.all(trials.map(async ([id, trial]) => ({
+    id, ...trial,
+    latestInvitation: trial.current ? await read(publicClient,address,'get_invitation',[id,BigInt(trial.current)]) : null,
+  })));
+  renderRegister();
   byId('older').hidden = first <= 8n;
   byId('newest').hidden = first === total;
   const [id, trial] = trials.find(([id]) => id === selected) ?? trials[0];
@@ -279,7 +303,7 @@ async function update() {
   const detail = byId('detail');
   detail.replaceChildren(node('p', 'Reading final invitation history…'));
   for (let i = latest; i > 0n; i--) {
-    history.push([i, await read(publicClient, address, 'get_invitation', [id, i])]);
+    history.push([i, i === latest ? records.find(row => row.id === id).latestInvitation : await read(publicClient, address, 'get_invitation', [id, i])]);
   }
   if (selected !== id) return;
   currentTrial = {...trial, id, history};

@@ -10,28 +10,30 @@
 <header class="mast">
   <a class="brand" href="./"><span class="mark" aria-hidden="true">V</span> Vendor Docket</a>
   <p>STABLE STUDIONET</p>
-  <button id="wallet" type="button">Test wallets</button>
+  <button id="wallet" type="button">Connect Wallet</button>
 </header>
 <main>
-  <section class="intro">
-    <div class="kicker">PROCUREMENT / SUPPLIER TRIALS</div>
-    <h1>Issue a trial.<br><em>Verify the supplier.</em></h1>
-    <p>Invite one supplier to a pilot order. GenLayer checks the GLEIF record before the invited wallet can claim the work order.</p>
-    <a class="source" href="https://www.gleif.org/en/lei-data/access-and-use-lei-data/gleif-api" target="_blank" rel="noreferrer">GLEIF data source ↗</a>
-    <nav id="examples" class="sampleLinks" aria-label="Example trials" hidden></nav>
+  <section class="overview" aria-labelledby="title">
+    <div><h1 id="title">Procurement overview</h1><p>Pilot orders, supplier eligibility and awarded work.</p></div>
+    <button id="open" type="button">New trial</button>
   </section>
-  <section class="desk" aria-label="Docket workspace">
-    <aside class="queue">
-      <div class="queueHead"><h2>Trial register</h2><button id="open" type="button">New trial</button></div>
-      <div id="trials"></div>
-      <button id="newest" type="button" hidden>Newest trials</button>
-      <button id="older" type="button" hidden>Older trials</button>
-    </aside>
-    <article id="detail" class="detail"></article>
-  </section>
+  <nav id="examples" class="sampleLinks" aria-label="Example trials" hidden></nav>
+  <div id="metrics" class="metrics" aria-label="Trial metrics"></div>
+  <nav id="views" class="views" aria-label="Procurement views">
+    <button data-view="docket" type="button" aria-pressed="true">Trial docket</button>
+    <button data-view="registry" type="button" aria-pressed="false">Supplier registry</button>
+    <button data-view="verification" type="button" aria-pressed="false">Verification center</button>
+    <button data-view="orders" type="button" aria-pressed="false">Work orders</button>
+  </nav>
   <p id="notice" role="status"></p>
+  <section class="desk" aria-label="Docket workspace">
+    <div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="trials"></tbody></table></div>
+    <div class="paging"><button id="newest" type="button" hidden>Newest trials</button><button id="older" type="button" hidden>Older trials</button></div>
+    <article id="detail" class="detail" aria-live="polite"></article>
+  </section>
 </main>
 <dialog id="dialog"><form id="actionForm"><h2 id="dialogTitle"></h2><div id="fields"></div><p id="signingContext"></p><div class="buttons"><button value="cancel" type="button" id="cancel">Cancel</button><button type="submit" class="primary" id="confirm">Confirm</button></div></form></dialog>
+<dialog id="walletPanel" aria-labelledby="walletTitle"><h2 id="walletTitle">Wallets</h2><div id="walletChoices"></div><p id="walletFeedback" role="status"></p><button id="walletClose" type="button">Close</button></dialog>
 <script type="module" src="/src.mjs"></script>
 </body>
 </html>

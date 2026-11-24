@@ -49,3 +49,11 @@ Earlier deployment addresses and their observed receipts are preserved in [relea
 - [Trial 3](https://xiaoyu7799.github.io/vendor-docket-genlayer/?trial=3) was opened by an in-browser session wallet after a Studionet faucet transfer. Its receipt and final trial record are included in the evidence.
 
 [Trial 4](https://xiaoyu7799.github.io/vendor-docket-genlayer/?trial=4) demonstrates the full website workflow using two Studionet session wallets. The buyer opened the trial and invited the supplier, then the supplier passed the GLEIF check and accepted work order `VD-4-1`. The four receipts and recorded readbacks are in [deployment.json](deployment.json).
+
+## Browser wallets
+
+Choose **Connect Wallet** and select the discovered MetaMask, OKX Wallet, or other injected EIP-1193 provider. The app discovers EIP-6963 providers first and offers to switch to or add Stable Studionet (61999) when needed. It shows the selected account and its Studionet balance. Disconnect clears the application's selected connection.
+
+GenLayerJS 2.0.0 estimates the transaction fees and builds the consensus transaction. The selected provider handles `eth_sendTransaction` after the app rechecks the account and network. The app then waits for finality and rereads final contract state. Only use test GEN. **Demo / Test Wallet** uses separate temporary accounts held in memory.
+
+Run `node --test scripts/wallet.test.mjs` to check provider discovery, switching and signer routing through the pinned SDK with a controlled provider. Browser-extension availability and transaction signing depend on the installed wallet and its support for Stable Studionet.
