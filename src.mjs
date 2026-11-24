@@ -17,6 +17,7 @@ let selected = /^[1-9][0-9]{0,19}$/.test(requestedTrial ?? '')
 let currentTrial;
 let view = 'docket';
 let records = [];
+let readSequence = 0;
 let total = 0n;
 let first;
 let busy = false;
@@ -50,7 +51,7 @@ function inform(message, hash) {
   if (hash) notice.append(' ', link('View transaction ↗', explorer + '/transactions/' + hash));
 }
 function errorText(error) {
-  return error.shortMessage ?? error.message ?? String(error);
+  return error.details ?? error.shortMessage ?? error.message ?? String(error);
 }
 function displayWallet() {
   byId('wallet').disabled = busy;
@@ -87,7 +88,8 @@ walletPanel({
   client: publicClient, fund, report: inform,
   change(wallet) {
     active = wallet;
-    update().catch(error => inform(error.message));
+    displayWallet();
+    if(currentTrial) renderDetail(currentTrial);
   },
 });
 async function send(method, args, label) {
@@ -235,22 +237,23 @@ function renderRegister() {
     header.append(th);
   }
   byId('tableHead').replaceChildren(header);
-  const visible=records.filter(record=>view==='docket' || (view==='orders' ? record.work_order : record.latestInvitation));
+  const visible=records.filter(record=>view==='docket' || (view==='orders' ? record.work_order : record.current));
   const rows=visible.map(record=>{
     const row=node('tr');
     if(selected===record.id) row.className='selected';
     const id=node('td');
     const open=button('VD-'+record.id,()=>{
       selected=record.id;
-      update().catch(error=>inform(errorText(error)));
+      renderRegister();
+      showTrial(record).catch(error=>inform(errorText(error)));
     },'record-button');
     open.setAttribute('aria-pressed',String(selected===record.id));
     id.append(open);
     const item=record.latestInvitation;
     const cells={
       docket:[record.brief,record.status,item?.decision ?? '—'],
-      registry:[item?.legal_name || 'Awaiting registry check',item?.lei,item?.registration || '—'],
-      verification:[item?.lei,item?.decision,item?.updated || '—'],
+      registry:[item?.legal_name || 'Awaiting registry check',item?.lei ?? '—',item?.registration || '—'],
+      verification:[item?.lei ?? '—',item?.decision ?? '—',item?.updated || '—'],
       orders:[record.work_order,record.brief,record.supplier],
     };
     row.append(id,...cells[view].map(value=>node('td',value)));
@@ -272,7 +275,31 @@ for(const control of byId('views').querySelectorAll('button')){
       option.setAttribute('aria-pressed',String(option===control));
     }
     renderRegister();
+    loadRegistry().catch(error=>inform(errorText(error)));
   };
+}
+async function loadRegistry() {
+  if(!['registry','verification'].includes(view)) return;
+  const page=records;
+  await Promise.all(page.filter(record=>record.current && !record.latestInvitation).map(async record=>{
+    record.latestInvitation=await read(publicClient,address,'get_invitation',[record.id,BigInt(record.current)]);
+  }));
+  if(records===page) renderRegister();
+}
+async function showTrial(trial) {
+  const ticket=++readSequence;
+  const detail=byId('detail');
+  detail.replaceChildren(node('p','Reading final invitation history…'));
+  const history=[];
+  for(let version=BigInt(trial.current);version>0n;version--){
+    const item=await read(publicClient,address,'get_invitation',[trial.id,version]);
+    if(version===BigInt(trial.current)) trial.latestInvitation=item;
+    history.push([version,item]);
+  }
+  if(ticket!==readSequence || selected!==trial.id) return;
+  currentTrial={...trial,history};
+  renderRegister();
+  renderDetail(currentTrial);
 }
 async function update() {
   if (!address) {
@@ -289,25 +316,15 @@ async function update() {
   selected ??= total;
   const ids = Array.from({length: Number(first < 8n ? first : 8n)}, (_, index) => first - BigInt(index));
   const trials = await Promise.all(ids.map(async id => [id, await read(publicClient, address, 'get_trial', [id])]));
-  records = await Promise.all(trials.map(async ([id, trial]) => ({
-    id, ...trial,
-    latestInvitation: trial.current ? await read(publicClient,address,'get_invitation',[id,BigInt(trial.current)]) : null,
-  })));
-  renderRegister();
+  records = trials.map(([id, trial]) => ({id,...trial}));
   byId('older').hidden = first <= 8n;
   byId('newest').hidden = first === total;
-  const [id, trial] = trials.find(([id]) => id === selected) ?? trials[0];
-  selected = id;
-  const history = [];
-  const latest = BigInt(trial.current);
-  const detail = byId('detail');
-  detail.replaceChildren(node('p', 'Reading final invitation history…'));
-  for (let i = latest; i > 0n; i--) {
-    history.push([i, i === latest ? records.find(row => row.id === id).latestInvitation : await read(publicClient, address, 'get_invitation', [id, i])]);
-  }
-  if (selected !== id) return;
-  currentTrial = {...trial, id, history};
-  renderDetail(currentTrial);
+  const trial=records.find(record=>record.id===selected) ?? records[0];
+  selected=trial.id;
+  renderRegister();
+  await showTrial(trial);
+  await loadRegistry();
+
 }
 byId('newest').onclick = () => {
   first = undefined;
@@ -331,5 +348,6 @@ if (deployment.browserWorkflow?.id && deployment.states?.blocked) {
   }
   examples.hidden = false;
 }
+byId('refresh').onclick = () => update().then(()=>inform('Final trial data refreshed.')).catch(error=>inform(errorText(error)));
 displayWallet();
 update().catch(error => inform(errorText(error)));
