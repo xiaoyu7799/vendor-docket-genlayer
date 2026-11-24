@@ -46,3 +46,51 @@ if (states.browserTrial) {
   assert.deepEqual(browserTrial, states.browserTrial);
   console.log('latest-final 3', browserTrial.status, 'Browser signing and state readback verified');
 }
+
+if (deployment.browserWorkflow) {
+  const {id, states: browser} = deployment.browserWorkflow;
+  for (const stage of ['open', 'invite', 'review', 'accept']) {
+    assert.equal(transactions['browser-final-' + stage]?.execution, 'SUCCESS');
+  }
+  assert.equal(transactions['browser-final-open'].result?.payload?.readable, String(id));
+  for (const stage of ['open', 'invite']) {
+    assert.equal(transactions['browser-final-' + stage].sender.toLowerCase(), browser.accept.trial.buyer.toLowerCase());
+  }
+  for (const stage of ['review', 'accept']) {
+    assert.equal(transactions['browser-final-' + stage].sender.toLowerCase(), browser.accept.invitation.supplier.toLowerCase());
+  }
+  assert.notEqual(browser.accept.trial.buyer.toLowerCase(), browser.accept.invitation.supplier.toLowerCase());
+  assert.equal(browser.invite.trial.status, 'INVITED');
+  assert.equal(browser.invite.invitation.decision, 'PENDING');
+  assert.equal(browser.review.trial.status, 'CLEARED');
+  assert.equal(browser.review.invitation.registration, 'ISSUED');
+  assert.equal(browser.review.invitation.entity, 'ACTIVE');
+  assert.equal(browser.accept.trial.status, 'AWARDED');
+  assert.equal(browser.accept.trial.work_order, 'VD-' + id + '-1');
+  assert.deepEqual(browser.accept.invitation, browser.review.invitation);
+  const trial = await read(client, address, 'get_trial', [BigInt(id)]);
+  assert.deepEqual(trial, browser.accept.trial);
+  assert.deepEqual(await read(client, address, 'get_invitation', [BigInt(id), 1n]), browser.accept.invitation);
+  console.log('latest-final', id, trial.status, trial.work_order, 'Browser workflow verified');
+}
+
+if (deployment.invitationVersions) {
+  const {id, states: revisions} = deployment.invitationVersions;
+  assert.equal(transactions['version-invite-second']?.execution, 'SUCCESS');
+  for (const [name, reason] of [
+    ['version-reject-stale-review', 'INVITATION_CHANGED'],
+    ['version-reject-stale-accept', 'INVITATION_CHANGED'],
+    ['version-reject-repeat-review', 'ACTIVE_SUPPLIER_INVITATION_REQUIRED'],
+  ]) {
+    assert.equal(transactions[name]?.execution, 'ERROR', name);
+    assert.equal(transactions[name]?.result?.payload, reason, name);
+  }
+  assert.deepEqual(revisions.afterStaleVersion, revisions.secondInvitation);
+  assert.deepEqual(revisions.afterRepeatReview, revisions.versionCleared);
+  const trial = await read(client, address, 'get_trial', [BigInt(id)]);
+  assert.deepEqual(trial, revisions.afterRepeatReview.trial);
+  assert.equal(Number(trial.current), 2);
+  assert.equal((await read(client, address, 'get_invitation', [BigInt(id), 1n])).decision, 'WITHDRAWN');
+  assert.deepEqual(await read(client, address, 'get_invitation', [BigInt(id), 2n]), revisions.afterRepeatReview.invitation);
+  console.log('latest-final', id, trial.status, 'Invitation version 2 verified');
+}
